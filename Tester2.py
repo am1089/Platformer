@@ -10,7 +10,9 @@ walkRight = [pygame.image.load('R1.png'), pygame.image.load('R2.png'), pygame.im
 walkLeft = [pygame.image.load('L1.png'), pygame.image.load('L2.png'), pygame.image.load('L3.png'), pygame.image.load('L4.png'), pygame.image.load('L5.png'), pygame.image.load('L6.png'), pygame.image.load('L7.png'), pygame.image.load('L8.png'), pygame.image.load('L9.png')]
 backgroundImage = pygame.image.load('bg.jpg')
 backgroundImage2 = pygame.image.load('8-bit_Space.png')
-backgroundImage3 = pygame.image.load('desert.png')
+backgroundBaseImage3 = pygame.image.load('desert.png')
+backgroundImage3 = pygame.transform.scale(backgroundBaseImage3 ,(852, 480))
+bgImg= backgroundImage
 character = pygame.image.load('standing.png')
 bgX = 0
 bgY = 0
@@ -66,7 +68,7 @@ class projectile(object):
     
 
 def redrawGameWindow():
-    windowSurface.blit(backgroundImage, (bgX, bgY))
+    windowSurface.blit(bgImg, (bgX, bgY))
     player.draw(windowSurface)
     for bullet in bullets:
         bullet.draw(windowSurface)
@@ -113,8 +115,8 @@ while True:
         player.left = True
         player.right = False
         player.standing = False
-        if player.x < windowWidth:
-            windowSurface.blit(backgroundImage3, (bgX, bgY))
+        if player.x <= 0:
+            bgImg = backgroundImage3
             player.x = 851
     elif keys[pygame.K_RIGHT]:
         player.x += player.velocity
@@ -122,7 +124,7 @@ while True:
         player.left = False
         player.standing = False
         if player.x > windowWidth:
-            windowSurface.blit(backgroundImage2, (bgX, bgY))
+            bgImg = backgroundImage2
             player.x = 1
     else:
         player.standing = True
