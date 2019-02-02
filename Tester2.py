@@ -9,6 +9,8 @@ windowSurface = pygame.display.set_mode((windowWidth,windowHeight))
 walkRight = [pygame.image.load('R1.png'), pygame.image.load('R2.png'), pygame.image.load('R3.png'), pygame.image.load('R4.png'), pygame.image.load('R5.png'), pygame.image.load('R6.png'), pygame.image.load('R7.png'), pygame.image.load('R8.png'), pygame.image.load('R9.png')]
 walkLeft = [pygame.image.load('L1.png'), pygame.image.load('L2.png'), pygame.image.load('L3.png'), pygame.image.load('L4.png'), pygame.image.load('L5.png'), pygame.image.load('L6.png'), pygame.image.load('L7.png'), pygame.image.load('L8.png'), pygame.image.load('L9.png')]
 backgroundImage = pygame.image.load('bg.jpg')
+backgroundImage2 = pygame.image.load('8-bit_Space.png')
+backgroundImage3 = pygame.image.load('desert.png')
 character = pygame.image.load('standing.png')
 bgX = 0
 bgY = 0
@@ -106,18 +108,22 @@ while True:
         if len(bullets) < 5:
             bullets.append(projectile(round(player.x + player.width //2), round(player.y + player.height//2), 6, (0,0,0), facing))
 
-    if keys[pygame.K_LEFT] and player.x > player.velocity:
+    if keys[pygame.K_LEFT]:
         player.x -= player.velocity
         player.left = True
         player.right = False
         player.standing = False
-        backgroundImage.scroll(-5, 0)
-    elif keys[pygame.K_RIGHT] and player.x < windowWidth - player.width - player.velocity:
+        if player.x < windowWidth:
+            windowSurface.blit(backgroundImage3, (bgX, bgY))
+            player.x = 851
+    elif keys[pygame.K_RIGHT]:
         player.x += player.velocity
         player.right = True
         player.left = False
         player.standing = False
-        backgroundImage.scroll(5, 0)
+        if player.x > windowWidth:
+            windowSurface.blit(backgroundImage2, (bgX, bgY))
+            player.x = 1
     else:
         player.standing = True
         player.walkCount = 0
@@ -130,7 +136,7 @@ while True:
             player.walkCount = 0
     else:
         if player.jumpCount >= -10:
-            neg = 1
+            neg = 1 
             if player.jumpCount < 0:
                 neg = -1
             player.y -= (player.jumpCount ** 2) * 0.5 * neg
