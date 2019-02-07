@@ -14,8 +14,11 @@ backgroundBaseImage3 = pygame.image.load('desert.png')
 backgroundImage3 = pygame.transform.scale(backgroundBaseImage3 ,(852, 480))
 bgImg= backgroundImage
 character = pygame.image.load('standing.png')
+Red = (255, 0, 0)
 bgX = 0
 bgY = 0
+platform_Y = windowHeight - 128
+platform_X = 0
 
 clock = pygame.time.Clock()
 
@@ -53,7 +56,6 @@ class player(object):
                 windowSurface.blit(walkLeft[0], (self.x, self.y))
                 
 
-
 class projectile(object):
     def __init__(self,x,y,radius,color,facing):
         self.x = x
@@ -69,6 +71,7 @@ class projectile(object):
 
 def redrawGameWindow():
     windowSurface.blit(bgImg, (bgX, bgY))
+    pygame.draw.line(windowSurface, Red, (platform_X, 521), (windowWidth, 521), 220)
     player.draw(windowSurface)
     for bullet in bullets:
         bullet.draw(windowSurface)
@@ -80,12 +83,20 @@ def terminate():
     sys.exit()
 
 
+
+
 #mainloop
-player = player(200, 410, 64,64)
+player = player(400, 240, 64,64)
 bullets = []
 while True:
     clock.tick(27)
 
+    #print("Player Y = " + str(player.y))
+    if player.y <= platform_Y and (player.y + player.velocity) >= platform_Y:
+        player.y = platform_Y
+    else:
+        player.y += player.velocity
+    
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             terminate()
